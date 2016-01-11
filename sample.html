@@ -1,0 +1,32 @@
+<!--Directives add functionality to the application. -->
+<!DOCTYPE html>
+<html>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+
+<body>
+<div ng-app = "myApp" ng-controller = "customersCtrl">
+	<button id = "btnStart" ng-click = "Start()">Start</button>
+	<div class = "spinner" ng-show = "loading">
+		<img src = "https://i2.wp.com/www.dhp11.com/foswiki/pub/Internal/2012-06-12/spinner.gif"/>
+	</div>
+	 <ul>
+
+    <li ng-repeat = "x in names track by $index"> <!--correct ng-repeat error-->
+
+    {{ x.Name + ', ' + x.Country }}
+
+    </li>
+
+    </ul>
+</div>
+
+<script>
+//Promises and deferred functions
+var urls = ["first.json", "second.json"]; //add URLs from JSON stuff
+var promises = []; //Empty array of promises
+
+</script>
+</body>
+
+</html>
+
