@@ -39,6 +39,7 @@ app.controller('customersCtrl', function ($scope, $http, $q, $timeout){
 					promise = deferredObj.promise; //let's see what this is. 
 				promises.push(promise);
 			}
+			console.log(promises); //let's see what's here. 
 			console.log("Done!");
 			$scope.loading = false; 
 		}, 3000);
