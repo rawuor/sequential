@@ -29,13 +29,14 @@ var app = angular.module('myApp', []);
 
 app.controller('customersCtrl', function ($scope, $http, $q, $timeout){
 	$scope.loading = false;
-	
+	var deferredObj = $q.defer(); //create a deferred object
 	$scope.Start = function(){
 		$scope.loading = true; 
 		
 		setTimeout (function (){
 			for (var i = 0; i < urls.length; i++){
 				var promise = $http.get(urls[i]);
+					promise = deferredObj.promise; //let's see what this is. 
 				promises.push(promise);
 			}
 			console.log("Done!");
