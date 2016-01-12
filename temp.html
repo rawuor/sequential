@@ -22,8 +22,19 @@
 
 <script>
 //Promises and deferred functions
-//var urls = ["http://hipsterjesus.com/api/","http://www.w3schools.com/angular/customers.php"]; 
-var urls = ["http://www.w3schools.com/angular/customers.php","http://hipsterjesus.com/api/" ];
+//Useful links from today: http://www.peterbe.com/plog/promises-with-$http
+//http://www.sitepoint.com/deeper-dive-javascript-promises/
+//http://stackoverflow.com/questions/25704745/how-do-i-sequentially-chain-promises-with-angularjs-q
+//https://thinkster.io/a-better-way-to-learn-angularjs/promises
+//http://www.webdeveasy.com/javascript-promises-and-angularjs-q-service/
+//http://busypeoples.github.io/post/promises-in-angular-js/
+//http://www.martin-brennan.com/using-q-all-to-resolve-multiple-promises/
+//http://taoofcode.net/promise-anti-patterns/
+//https://techanand.wordpress.com/2015/07/04/sequential-execution-of-promises-in-angularjs/
+//http://jsfiddle.net/jsengel/0ryvkvph/
+
+var urls = ["http://hipsterjesus.com/api/","http://www.w3schools.com/angular/customers.php"]; 
+//var urls = ["http://www.w3schools.com/angular/customers.php","http://hipsterjesus.com/api/"];
 var promises = []; //Empty array of promises  
 var tmp = [];
 var app = angular.module('myApp', []);
@@ -37,8 +48,12 @@ app.controller('customersCtrl', function ($scope, $http, $q, $timeout){
 		setTimeout (function (){
 			for (var i = 0; i < urls.length; i++){
 				var deferredObj = $q.defer();
-				var promise = $http.get(urls[i]);
+				var promise = $http.get(urls[i]).success(function(data){
+					console.log(data);
+				});
+				console.log(promise); 
 				deferredObj.resolve(promise);
+				//console.log(deferredObj);
 				promise = deferredObj.promise;
 				promises.push(promise);
 			}
@@ -48,17 +63,9 @@ app.controller('customersCtrl', function ($scope, $http, $q, $timeout){
 				values.forEach(function(data){
 					console.log(data);
 				});
-				//console.log(values);
+			
 			})
-			//console.log(chain);
-			//Execute the then function?
-			//for(var k = 0; k < promises.length; k++){
-				//promises[k].then(function(data){
-				//	console.log( k + ' promise succeeded', data)
-				//}, function (error){
-				//	console.log(k + ' promise failed', error);
-				//});
-			//}
+			
 			console.log("Done!");
 			$scope.loading = false; 
 		}, 3000);
