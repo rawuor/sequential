@@ -22,7 +22,7 @@
 
 <script>
 //Promises and deferred functions
-var urls = ["first.json", "second.json"]; //add URLs from JSON stuff
+var urls = ["http://hipsterjesus.com/api/","http://www.w3schools.com/angular/customers.php"]; //add URLs from JSON stuff
 var promises = []; //Empty array of promises
 var tmp = [];
 var app = angular.module('myApp', []);
@@ -38,6 +38,8 @@ app.controller('customersCtrl', function ($scope, $http, $q, $timeout){
 				var promise = $http.get(urls[i]);
 				promises.push(promise);
 			}
+			console.log("Done!");
+			$scope.loading = false; 
 		}, 3000);
 	}
 });
