@@ -36,7 +36,9 @@ app.controller('customersCtrl', function ($scope, $http, $q, $timeout){
 		setTimeout (function (){
 			for (var i = 0; i < urls.length; i++){
 				var promise = $http.get(urls[i]);
-					promise = deferredObj.promise; //let's see what this is. 
+				deferredObj.resolve(promise);//resolve deferred promise
+				console.log(deferredObj);
+				promise = deferredObj.promise; //let's see what this is. 
 				promises.push(promise);
 			}
 			console.log(promises); //let's see what's here. 
