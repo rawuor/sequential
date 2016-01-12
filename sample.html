@@ -24,6 +24,23 @@
 //Promises and deferred functions
 var urls = ["first.json", "second.json"]; //add URLs from JSON stuff
 var promises = []; //Empty array of promises
+var tmp = [];
+var app = angular.module('myApp', []);
+
+app.controller('customersCtrl', function ($scope, $http, $q, $timeout){
+	$scope.loading = false;
+	
+	$scope.Start = function(){
+		$scope.loading = true; 
+		
+		setTimeout (function (){
+			for (var i = 0; i < urls.length; i++){
+				var promise = $http.get(urls[i]);
+				promises.push(promise);
+			}
+		}, 3000);
+	}
+});
 
 </script>
 </body>
