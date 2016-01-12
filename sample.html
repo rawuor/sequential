@@ -29,19 +29,33 @@ var app = angular.module('myApp', []);
 
 app.controller('customersCtrl', function ($scope, $http, $q, $timeout){
 	$scope.loading = false;
-	var deferredObj = $q.defer(); //create a deferred object
+	
 	$scope.Start = function(){
 		$scope.loading = true; 
 		
 		setTimeout (function (){
 			for (var i = 0; i < urls.length; i++){
+				var deferredObj = $q.defer(); //create a deferred object
 				var promise = $http.get(urls[i]);
 				deferredObj.resolve(promise);//resolve deferred promise
 				console.log(deferredObj);
 				promise = deferredObj.promise; //let's see what this is. 
 				promises.push(promise);
+				promise.then(function(data){
+					console.log('promise succeeded', data);
+				}, function (error){
+					console.log('promise failed', error);
+				});
 			}
 			console.log(promises); //let's see what's here. 
+			//Execute the then function?
+			//for(var k = 0; k < promises.length; k++){
+				//promises[k].then(function(data){
+				//	console.log( k + ' promise succeeded', data)
+				//}, function (error){
+				//	console.log(k + ' promise failed', error);
+				//});
+			//}
 			console.log("Done!");
 			$scope.loading = false; 
 		}, 3000);
