@@ -22,7 +22,8 @@
 
 <script>
 //Promises and deferred functions
-var urls = ["http://hipsterjesus.com/api/","http://www.w3schools.com/angular/customers.php"]; //add URLs from JSON stuff
+//var urls = ["http://hipsterjesus.com/api/","http://www.w3schools.com/angular/customers.php"]; //add URLs from JSON stuff
+var urls = ["http://www.w3schools.com/angular/customers.php","http://hipsterjesus.com/api/" ];
 var promises = []; //Empty array of promises
 var tmp = [];
 var app = angular.module('myApp', []);
@@ -35,19 +36,21 @@ app.controller('customersCtrl', function ($scope, $http, $q, $timeout){
 		
 		setTimeout (function (){
 			for (var i = 0; i < urls.length; i++){
-				var deferredObj = $q.defer(); //create a deferred object
+				var deferredObj = $q.defer();
 				var promise = $http.get(urls[i]);
-				deferredObj.resolve(promise);//resolve deferred promise
-				console.log(deferredObj);
-				promise = deferredObj.promise; //let's see what this is. 
+				deferredObj.resolve(promise);
+				promise = deferredObj.promise;
 				promises.push(promise);
-				promise.then(function(data){
-					console.log('promise succeeded', data);
-				}, function (error){
-					console.log('promise failed', error);
-				});
 			}
 			console.log(promises); //let's see what's here. 
+			
+			$q.all(promises).then(function(values){
+				values.forEach(function(data){
+					console.log(data);
+				});
+				//console.log(values);
+			})
+			//console.log(chain);
 			//Execute the then function?
 			//for(var k = 0; k < promises.length; k++){
 				//promises[k].then(function(data){
