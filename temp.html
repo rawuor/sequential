@@ -1,4 +1,3 @@
-<!--Directives add functionality to the application. -->
 <!DOCTYPE html>
 <html>
 <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
@@ -32,6 +31,10 @@
 //http://taoofcode.net/promise-anti-patterns/
 //https://techanand.wordpress.com/2015/07/04/sequential-execution-of-promises-in-angularjs/
 //http://jsfiddle.net/jsengel/0ryvkvph/
+//https://transferwise.com/blog/2014-09/making-serial-xhr-calls-in-angularjs/
+
+//'manual' promise chaining : http://codepen.io/willh/pen/fCtuw
+
 
 var urls = ["http://hipsterjesus.com/api/","http://www.w3schools.com/angular/customers.php","http://www.w3schools.com/angular/customers.php","http://hipsterjesus.com/api/"]; 
 //var urls = ["http://www.w3schools.com/angular/customers.php","http://hipsterjesus.com/api/"];
@@ -49,7 +52,8 @@ app.controller('customersCtrl', function ($scope, $http, $q, $timeout){
 			for (var i = 0; i < urls.length; i++){
 				var deferredObj = $q.defer();
 				var promise = $http.get(urls[i]).success(function(data){
-					console.log(data);
+					//console.log(data);
+					return data; 
 				});
 				console.log(promise); 
 				deferredObj.resolve(promise);

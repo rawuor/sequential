@@ -8,50 +8,59 @@
 	<div class = "spinner" ng-show = "loading">
 		<img src = "https://i2.wp.com/www.dhp11.com/foswiki/pub/Internal/2012-06-12/spinner.gif"/>
 	</div>
-	 <ul>
 
-    <li ng-repeat = "x in names track by $index"> <!--correct ng-repeat error-->
-
-    {{ x.Name + ', ' + x.Country }}
-
-    </li>
-
-    </ul>
 </div>
 <script>
-	//Brute force first
 	var urls = ["http://hipsterjesus.com/api/","http://www.w3schools.com/angular/customers.php","http://www.w3schools.com/angular/customers.php","http://hipsterjesus.com/api/"]; 
 	var promises = []; //empty array of promises
 	var app = angular.module('myApp', []);
-	
+
 	app.controller('customersCtrl', function($scope, $http, $q, $timeout){
 		$scope.loading = false;
 		
-		$scope.Start = function(){
-			$scope.loading = true;
+		$scope.Start = function (){
+			$scope.loading = true; 
 			
 			setTimeout(function(){
-				$http.get(urls[0])
-				.then(function(values){
-					console.log(values.data);
-					
-					return $http.get(urls[1]);
+			//Get and resolve promises. 
+				for (var i = 0; i < urls.length; i++){
+					var deferredObj =  $q.defer();
+					var promise = $http.get(urls[i]).success(function(data){
+					return data;
+					}, function(errorMsg){
+					console.log("Error!"); 
+					});
+					deferredObj.resolve(promise);
+					promise = deferredObj.promise;
+					promises.push(promise);
+				}
+				//Promise chaining for sequential execution
+				promises[0].then(function(values){
+					console.log(values.data)
+					return promises[1];
 				})
 				.then(function(values){
 					console.log(values.data);
-					
-					return $http.get(urls[2]);
-				}).then(function(values){
+					return promises[2];
+				})
+				.then(function(values){
 					console.log(values.data);
-					
-					return $http.get(urls[3]);
-				}).then(function(values){
+					return promises[3];
+				})
+				.then(function(values){
 					console.log(values.data);
+				})
+				//Check if there's a failure in the promise chain.
+				.catch(function(errorMsg){
+					console.log("Error!" + errorMsg);
+				})
+				//Once done print on console and stop spinner gif.
+				.finally(function(){
+					console.log("Done!");
+					$scope.loading = false; 
 				});
 				
-				console.log("Done!");
-				$scope.loading = false;
-			},3000);
+			}, 3000);
 		}
 	});
 </script>
