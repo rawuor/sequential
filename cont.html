@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+
+<body>
+<div ng-app = "myApp" ng-controller = "customersCtrl">
+	<button id = "btnStart" ng-click = "Start()">Start</button>
+	<div class = "spinner" ng-show = "loading">
+		<img src = "https://i2.wp.com/www.dhp11.com/foswiki/pub/Internal/2012-06-12/spinner.gif"/>
+	</div>
+
+</div>
+<script>
+	var urls = ["http://hipsterjesus.com/api/","http://www.w3schools.com/angular/customers.php","http://www.w3schools.com/angular/customers.php","http://hipsterjesus.com/api/"]; 
+	var promises = []; //empty array of promises
+	var app = angular.module('myApp', []);
+
+	app.controller('customersCtrl', function($scope, $http, $q, $timeout){
+		$scope.loading = false;
+		
+		$scope.Start = function (){
+			$scope.loading = true; 
+			
+			setTimeout(function(){
+			//Get and resolve promises. 
+				for (var i = 0; i < urls.length; i++){
+					var deferredObj =  $q.defer();
+					var promise = $http.get(urls[i]).success(function(data){
+					return data;
+					}, function(errorMsg){
+					console.log("Error!"); 
+					});
+					deferredObj.resolve(promise);
+					promise = deferredObj.promise;
+					promises.push(promise);
+				}
+				//Promise chaining for sequential execution
+				promises[0].then(function(values){
+					console.log(values.data)
+					return promises[1];
+				})
+				.then(function(values){
+					console.log(values.data);
+					return promises[2];
+				})
+				.then(function(values){
+					console.log(values.data);
+					return promises[3];
+				})
+				.then(function(values){
+					console.log(values.data);
+				})
+				//Check if there's a failure in the promise chain.
+				.catch(function(errorMsg){
+					console.log("Error!" + errorMsg);
+				})
+				//Once done print on console and stop spinner gif.
+				.finally(function(){
+					console.log("Done!");
+					$scope.loading = false; 
+				});
+				
+			}, 3000);
+		}
+	});
+</script>
+</body>
+
+</html>
